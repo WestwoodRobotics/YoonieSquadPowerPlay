@@ -69,13 +69,6 @@ public class Robot{
 
     //TODO: move these methods to the Teleop file not here
 
-    public void score(){
-        //TODO: probably lower slides, open calw, flip arm and wrist back to normal pos
 
-    }
-
-    public void scoringPos(){
-        //TODO: flip arm, flip wrist
-    }
 
 }
