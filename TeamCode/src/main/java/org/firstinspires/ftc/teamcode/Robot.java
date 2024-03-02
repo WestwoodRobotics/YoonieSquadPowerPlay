@@ -14,8 +14,7 @@ public class Robot{
     public DcMotorEx leftBack;
     public DcMotorEx rightBack;
 
-    public DcMotorEx lift1;
-    public DcMotorEx lift2;
+    public DcMotorEx lift;
 
     public Servo claw;
     public Servo wrist;
@@ -34,15 +33,12 @@ public class Robot{
 
         //lift
 
-        lift1 = hardwareMap.get(DcMotorEx.class, "lift1");
-        lift1.setDirection(DcMotorEx.Direction.FORWARD);
-        lift1.setTargetPosition(30);
-        lift1.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        lift = hardwareMap.get(DcMotorEx.class, "lift1");
+        lift.setDirection(DcMotorEx.Direction.FORWARD);
+        lift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setTargetPosition(0);
+        lift.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
-        lift2 = hardwareMap.get(DcMotorEx.class, "lift2");
-        lift2.setDirection(DcMotorEx.Direction.REVERSE);
-        lift2.setTargetPosition(30);
-        lift2.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
         //drive
 
@@ -68,6 +64,7 @@ public class Robot{
     }
 
     //TODO: move these methods to the Teleop file not here
+
 
 
 
