@@ -26,14 +26,14 @@ public class Robot{
 
     public Robot(HardwareMap hardwareMap){
         //Do hardware mapping here
-        //arm
-
+        //servos
         armRight = hardwareMap.get(Servo.class, "armRight");
         armLeft = hardwareMap.get(Servo.class, "armLeft");
+        wrist = hardwareMap.get(Servo.class, "wrist");
+        claw = hardwareMap.get(Servo.class, "claw");
 
         //lift
-
-        lift = hardwareMap.get(DcMotorEx.class, "lift1");
+        lift = hardwareMap.get(DcMotorEx.class, "lift");
         lift.setDirection(DcMotorEx.Direction.FORWARD);
         lift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         lift.setTargetPosition(0);
@@ -59,8 +59,7 @@ public class Robot{
         rightBack.setDirection(DcMotorEx.Direction.FORWARD);
         rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        wrist = hardwareMap.get(Servo.class, "wrist");
-        claw = hardwareMap.get(Servo.class, "claw");
+
     }
 
     //TODO: move these methods to the Teleop file not here

@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.Robot;
 
 //TODO: find correct lift positions
-//TODO: find cocrrect claw/arm positions
+//TODO: find correct claw/arm positions
 
 public class JihoonRoboTeleop extends OpMode {
     Robot robot;
