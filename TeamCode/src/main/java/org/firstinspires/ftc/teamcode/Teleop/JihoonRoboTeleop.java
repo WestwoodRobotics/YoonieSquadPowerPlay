@@ -10,19 +10,17 @@ import org.firstinspires.ftc.teamcode.Robot;
 public class JihoonRoboTeleop extends OpMode {
     Robot robot;
     public int liftTarget = 0;
+    public int armTarget = 0;
 
     //status 0 is idle pos
-    //status 1 is scoring pos claw closed
-    //statis 2 is while scoring
+    //status 1 is wrist down, claw open
+    //status 2 is scoring
     public int status = 0;
 
-    public double liftMoveTime;
 
     @Override
     public void init() {
         robot = new Robot(hardwareMap);
-
-        robot.claw.setPosition(0);
     }
 
     @Override
@@ -46,61 +44,22 @@ public class JihoonRoboTeleop extends OpMode {
         robot.rightBack.setPower(drive - strafe-turn);
         robot.leftBack.setPower(drive + strafe+turn);
 
-
-        if (status == 0){
-            //claw control
-            if(gamepad1.left_bumper||gamepad1.right_bumper){
-                robot.claw.setPosition(1);
-            }else{
-                robot.claw.setPosition(0);
-            }
-            //lift control for stacks
-            liftTarget += gamepad1.right_trigger*10 - gamepad1.left_trigger * 10;
-            if (liftTarget > 200){
-                liftTarget = 200;
-            }else if(liftTarget < 0){
-                liftTarget = 0;
-            }
-
-        }else if(status == 1){
-            //initiate scoring
-            if(gamepad1.left_bumper||gamepad1.right_bumper){
-                liftTarget = 0;
-                liftMoveTime = getRuntime();
-                status = 2;
-            }
-
-        }else if(status == 2){
-            //finish scoring
-            if(getRuntime() - liftMoveTime > 1){
-                robot.claw.setPosition(1);
-            }
-
-            if(getRuntime() - liftMoveTime > 1.25){
-                idlePos();
-            }
-
-            //or open claw then idlepos immediately, without a delay
-        }
-
-
-        //scoringPos preset buttons
-        if(status != 2) {
-            if (gamepad1.a) {
-                idlePos();
-            } else if (gamepad1.b) {
-                scoringPos(400);
-            } else if (gamepad1.x) {
-                scoringPos(600);
-            } else if (gamepad1.y) {
-                scoringPos(800);
-            }
-        }
-
-
-        //set lift powering
         robot.lift.setPower(1);
-        robot.lift.setTargetPosition(liftTarget);
+        //TODO: switch armtarget from tick value to degreese value by applying the "ticks per degree later"
+        robot.arm.setTargetPosition(armTarget);
+        robot.lift.setPower(armTarget);
+
+
+        if(status == 2){
+            //TODO: 100 * ticks per degree
+            if(robot.arm.getCurrentPosition() > 100){
+                robot.lift.setTargetPosition(liftTarget);
+            }
+        }else if(status == 0){
+            robot.lift.setTargetPosition(0);
+        }else{
+            robot.lift.setTargetPosition(600);
+        }
     }
 
     @Override
@@ -108,22 +67,27 @@ public class JihoonRoboTeleop extends OpMode {
 
     }
 
-    public void scoringPos(int liftPresetTarget){
-        robot.claw.setPosition(0);
-        status = 1;
-        //flip arm, flip wrist, set lift pos
-        liftTarget = liftPresetTarget;
-        robot.armLeft.setPosition(0);
-        robot.armRight.setPosition(1);
-        robot.wrist.setPosition(1);
-    }
     public void  idlePos(){
         status = 0;
         //flip arm back forward, flip wrist, reset lift pos
-        liftTarget = 0;
-        robot.armLeft.setPosition(1);
-        robot.armRight.setPosition(0);
+        robot.arm.setTargetPosition(0);
+        robot.wrist.setPosition(0.5);
+        robot.lClaw.setPosition(1);
+        robot.rClaw.setPosition(0);
+    }
+    public void  scorePos(){
+        status = 2;
+        //flip arm back forward, flip wrist, reset lift pos
+        armTarget = 120;
+        robot.wrist.setPosition(1);
+    }
+
+    public void  pickPos(){
+        idlePos();
+        status = 1;
         robot.wrist.setPosition(0);
+        robot.lClaw.setPosition(0);
+        robot.rClaw.setPosition(1);
     }
 
 }

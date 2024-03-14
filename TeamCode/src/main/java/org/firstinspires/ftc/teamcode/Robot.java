@@ -15,21 +15,27 @@ public class Robot{
     public DcMotorEx rightBack;
 
     public DcMotorEx lift;
+    public DcMotorEx arm;
 
-    public Servo claw;
+    public Servo lClaw;
+    public Servo rClaw;
     public Servo wrist;
-    public Servo armRight;
-    public Servo armLeft;
+
     //TODO: set this to the actual machine limit?????
     public int liftMax = 1000;
+
+    //TODO: fill in these placeholders soon
+    //public int ticksPerDegree = gearRatio * TicksPerRev / 360;
 
 
     public Robot(HardwareMap hardwareMap){
         //Do hardware mapping here
         //arm
-
-        armRight = hardwareMap.get(Servo.class, "armRight");
-        armLeft = hardwareMap.get(Servo.class, "armLeft");
+        arm = hardwareMap.get(DcMotorEx.class, "arm");
+        arm.setDirection(DcMotorEx.Direction.FORWARD);
+        arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setTargetPosition(0);
+        arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
         //lift
 
@@ -60,7 +66,8 @@ public class Robot{
         rightBack.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         wrist = hardwareMap.get(Servo.class, "wrist");
-        claw = hardwareMap.get(Servo.class, "claw");
+        lClaw = hardwareMap.get(Servo.class, "lClaw");
+        rClaw = hardwareMap.get(Servo.class, "rClaw");
     }
 
     //TODO: move these methods to the Teleop file not here
